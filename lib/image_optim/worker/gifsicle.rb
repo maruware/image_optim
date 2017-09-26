@@ -32,6 +32,11 @@ class ImageOptim
         OptionHelpers.limit_with_range(v.to_i, 1..3)
       end
 
+      COLORS_OPTION =
+      option(:colors, nil, 'Reduce the number of colors to N: ') do |v|
+        OptionHelpers.limit_with_range(v.to_i, 2..256) if v
+      end
+
       CAREFUL_OPTION =
       option(:careful, false, 'Avoid bugs with some software'){ |v| !!v }
 
@@ -56,6 +61,7 @@ class ImageOptim
         end
         args.unshift '--careful' if careful
         args.unshift "--optimize=#{level}" if level
+        args.unshift "--colors=#{colors}" if colors
         execute(:gifsicle, *args) && optimized?(src, dst)
       end
     end
